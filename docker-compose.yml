@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8080:8080"
+    networks:
+      - microservices-network
+
+  boleto-service:
+    build: ./boleto-service
+    ports:
+      - "8081:8081"
+    networks:
+      - microservices-network
+
+  payment-processor-service:
+    build: ./payment-processor-service
+    ports:
+      - "8082:8082"
+    networks:
+      - microservices-network
+
+  pismo-integration-service:
+    build: ./pismo-integration-service
+    ports:
+      - "8083:8083"
+    networks:
+      - microservices-network
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8084:8084"
+    networks:
+      - microservices-network
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "8085:8085"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge

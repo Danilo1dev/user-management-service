@@ -1,44 +1,71 @@
-version: '3.8'
 services:
   auth-service:
-    build: ./auth-service
+    build: ./
+    container_name: auth-service
     ports:
       - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
     networks:
       - microservices-network
 
   boleto-service:
-    build: ./boleto-service
+    build: ./
+    container_name: boleto-service
     ports:
       - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
     networks:
       - microservices-network
 
-  payment-processor-service:
-    build: ./payment-processor-service
+  mock-pismo-service:
+    build: ./
+    container_name: mock-pismo-service
     ports:
       - "8082:8082"
-    networks:
-      - microservices-network
-
-  pismo-integration-service:
-    build: ./pismo-integration-service
-    ports:
-      - "8083:8083"
+    environment:
+      - SERVER_PORT=8082
     networks:
       - microservices-network
 
   notification-service:
-    build: ./notification-service
+    build: ./
+    container_name: notification-service
     ports:
-      - "8084:8084"
+      - "8083:8083"
+    environment:
+      - SERVER_PORT=8083
     networks:
       - microservices-network
 
-  user-service:
-    build: ./user-service
+  payment-processor-service:
+    build: ./
+    container_name: payment-processor-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SERVER_PORT=8084
+    networks:
+      - microservices-network
+
+  pismo-integration-service:
+    build: ./
+    container_name: pismo-integration-service
     ports:
       - "8085:8085"
+    environment:
+      - SERVER_PORT=8085
+    networks:
+      - microservices-network
+
+  user-management-service:
+    build: ./
+    container_name: user-management-service
+    ports:
+      - "8086:8086"
+    environment:
+      - SERVER_PORT=8086
     networks:
       - microservices-network
 

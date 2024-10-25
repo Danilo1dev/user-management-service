@@ -1,21 +1,29 @@
 package com.mentory.spring.user_management_service.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import com.mentory.spring.user_management_service.dtos.UserRequestVO;
+import com.mentory.spring.user_management_service.dtos.UserValidationRequestDTO;
+import com.mentory.spring.user_management_service.dtos.UserValidationResponseDTO;
+import com.mentory.spring.user_management_service.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
-@Slf4j
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
+    private final UserService userService;
 
-    @GetMapping("/buscar")
-    public ResponseEntity<String> buscaDados() {
-        log.info("CONTROLLER: OK");
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody UserRequestVO userRequestVO){
+        userService.createUser(userRequestVO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<UserValidationResponseDTO> validateUser(@RequestBody UserValidationRequestDTO userValidationRequestDTO){
+        return ResponseEntity.ok(userService.validateUser(userValidationRequestDTO));
     }
 }

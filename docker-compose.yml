@@ -1,25 +1,7 @@
 services:
-  user-management-service:
-    build: ./
-    container_name: user-management-service
-    ports:
-      - "8086:8086"
-    environment:
-      SERVER_PORT: 8086
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://user-management-db:5432/userdb
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    networks:
-      - microservices-network
-    depends_on:
-      - user-management-db
-
-  user-management-db:
-    image: postgres:latest
-    container_name: user-management-db
-    restart: always
+  DB-user-management:
+    image: postgres:15-alpine
+    container_name: DB-user-management
     environment:
       POSTGRES_DB: userdb
       POSTGRES_USER: admin
@@ -28,8 +10,25 @@ services:
       - "5432:5432"
     networks:
       - microservices-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d userdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-management-service:
+    build: ./
+    container_name: user-management-service
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      DB-user-management:
+        condition: service_healthy
+    networks:
+      - microservices-network
 
 networks:
   microservices-network:
     driver: bridge
-
